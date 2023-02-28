@@ -1,4 +1,4 @@
-import Minio from 'minio';
+import * as Minio from 'minio';
 import { writeFile } from 'fs';
 import { setTimeout } from 'timers/promises';
 
@@ -18,9 +18,7 @@ while(true) {
     writeFile(filename, line, { encoding: "utf8", flag: "w" }, function (){})
 
     var metaData = {
-        'Content-Type': 'application/octet-stream',
-        'X-Amz-Meta-Testing': 1234,
-        'example': 5678
+        'Content-Type': 'application/octet-stream'
     }
 
     minioClient.fPutObject(process.env.BUCKET_NAME, process.env.BUCKET_REGION, filename, metaData, function(err, etag) {

@@ -18,5 +18,8 @@
     "license": "Apache 2.0",
     "devDependencies": {
         "@types/minio": "^7.0.16"
+    },
+    "dependencies": {
+        "minio": "^7.0.32"
     }
 }

@@ -14,7 +14,7 @@ mirror:
 deliver_node:
   stage: deliver
   script:
-    - setsid ./ci/docker-deliver.sh "minio-client-debug-node" "1.0" "node"
+    - setsid ./ci/docker-deliver.sh "minio-client-debug-node" "1.1" "node"
   only:
     refs:
       - /^(main.*)$/

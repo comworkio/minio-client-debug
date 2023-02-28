@@ -1,8 +1,8 @@
 import * as Minio from 'minio';
-import * as crypto from 'crypto';
-import { writeFile, createReadStream } from 'fs';
+import { writeFile } from 'fs';
 import { setTimeout } from 'timers/promises';
 
+var dirpath = process.env.BUCKET_DIRPATH
 var filename = process.env.BUCKET_FILENAME
 var wait_time = process.env.WAIT_TIME
 
@@ -15,24 +15,15 @@ var minioClient = new Minio.Client({
 
 while(true) {
     var line = "Written at " + new Date().toISOString()
-    writeFile(filename, line, { encoding: "utf8", flag: "w" }, function (){})
-    var hash = crypto.createHash('md5');
-    hash.setEncoding('base64');
-    var fileStream = createReadStream(filename);
-    fileStream.on('end', () => {
-        hash.end();
-        minioClient.fPutObject(process.env.BUCKET_NAME, filename, "dir/" + filename, { 
-                'Content-Type': 'application/octet-stream', 
-                'Content-MD5': hash.read() 
-            }, 
-            function(err, etag) {
-                if (err) {
-                    return console.log(err)
-                }
-            }
-        );
+    writeFile(filename, line, { encoding: "utf8", flag: "w" }, (err) => {
+        if (err) {
+            console.log("Unexpected error: " + err)
+            return;
+        }
+
+        minioClient.fPutObject(process.env.BUCKET_NAME, dirpath + "/" + filename, filename);
+        console.log(line)
     })
 
-    console.log(line)
     await setTimeout(wait_time * 1000);
 }

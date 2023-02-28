@@ -1,0 +1,25 @@
+stages:
+  - publish
+  - deliver
+
+mirror:
+  stage: publish
+  script:
+    - setsid ./ci/mirror.sh
+  only:
+    - /^(main.*)$/
+  tags:
+    - mirror
+
+deliver_node:
+  stage: deliver
+  script:
+    - setsid ./ci/docker-deliver.sh "minio-client-debug-node" "1.0" "node"
+  only:
+    refs:
+      - /^(main.*)$/
+    changes:
+      - ci/docker-deliver.sh
+      - node/*
+  tags:
+    - imagesbuilder

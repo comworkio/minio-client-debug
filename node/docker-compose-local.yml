@@ -1,0 +1,10 @@
+version: "3.3"
+
+services: 
+  minio-client-debug-node:
+    image: comworkio/minio-client-debug-node:latest
+    env_file:
+      - .env
+    build: 
+      context: .
+      dockerfile: Dockerfile
